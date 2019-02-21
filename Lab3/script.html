@@ -1,0 +1,33 @@
+<h1 id="information-retrieval---evaluation">Information Retrieval - Evaluation</h1>
+<h1 id="introduction">Introduction</h1>
+<p>Check out <code>search.py</code>. This is a very simple search engine (using bag of words vector space model, TF-IDF term weighting and cosine similarity) that reads and indexes the <code>*.txt</code> files in the directory. These <code>txt</code> files are stories that have been taken from BBC news at random.</p>
+<p>Try a query:</p>
+<pre><code>python search.py &quot;car&quot;</code></pre>
+<p>You should receive some results and some scores:</p>
+<pre><code>usedcars.txt 0.310266905527
+driverlesscar.txt 0.110330628902</code></pre>
+<p>Have a skim read through the news stories to get an idea about their contents and provide some intuition as to what search terms should return which documents. Does this search engine work well?</p>
+<h1 id="evaluation">Evaluation</h1>
+<p>This weeks lab will be looking at evaluation methods. To evaluate whether a search engine is performing as we expect, we need some form of gold-standard, the agreed and expected result(s) for a query.</p>
+<p>In <code>evaluation.csv</code>, each row has some search terms, followed by the expected results.</p>
+<p>We can run <code>python evaluation.py</code>, to compare the output of our search engine with the expected results in <code>evaluation.csv</code>. If at anytime you want to see the scores, remember you can run <code>python search.py</code> to carry out searches yourself. The first two exercises will walk you through the output of the evaluation.</p>
+<h1 id="ex-1">Ex 1</h1>
+<p>The first example query in the evaluation file is &quot;music and video&quot;. There are two stories relating to music and video in the texts. One regarding Spotify, and another YouTube.</p>
+<p>Here we have 1.0 recall, 100%. We match both expected results (and they are top results, order will be covered by next weeks evaluation metrics), but we also match everything else. Returning everything will give 100% recall, but we also need precision, otherwise it isn't a search, it is just simply returning everything (again - ignoring order for now).</p>
+<p>Why did this happen? &quot;and&quot; has matched all the documents here. A real search engine would use stopword removal to get rid of really common words such as &quot;and&quot;.</p>
+<p>The next example searches for &quot;and&quot; alone. We don't really want everything to be returned when we search for &quot;and&quot;. In fact, we don't want any results. Consequently we get no score, and all those results are shown as being incorrectly identified, or &quot;false positives&quot;.</p>
+<p>Now we try &quot;music&quot; and &quot;video&quot; by themselves. We get the expected &quot;spotify&quot; and &quot;youtube&quot; respectively and retrieve no incorrect results. This gives us 100% precision.</p>
+<h1 id="ex-2">Ex 2</h1>
+<p>The next search is for &quot;car&quot;. This is the opposite of the last example, we have 100% precision, but not 100% recall. So everything we fetched we got right, but we missed some things (false negatives). Looking at the &quot;false negatives&quot;, it appears we missed <code>potholes.txt</code>. Why did that happen? Looking at the text it appears that document doesn't actually include the word &quot;car&quot; anywhere. It does however include &quot;cars&quot; many times. A more complete search engine would include stemming, that would remove plurals and various other suffixes.</p>
+<p>When this search is repeated with &quot;cars&quot;, all relevant documents are matches (<code>potholes.txt, driverlesscar.txt, usedcars.txt</code>).</p>
+<h1 id="ex-3">Ex 3</h1>
+<p>Have a browse through the code in <code>evaluation.py</code> and look at how precision (function <code>calc_precision</code>), recall (function <code>calc_recall</code>) and f-measure (function <code>calc_fmeasure</code>) are calculated.</p>
+<p>Look also at the set operations used to determine the true positives, false positives and false negatives.</p>
+<h1 id="further-work">Further work</h1>
+<p>There are some deliberate faults discussed above with this search engine (<code>search.py</code>). Can you fix them? How did it improve the evaluation?</p>
+<p>Hints:</p>
+<ul>
+<li>stemming could be added in the <code>preprocess_token</code> function</li>
+<li>stopwords could be added in the <code>index_corpus</code> function</li>
+<li>tokenization is currently based on whitespace and could be improved in the <code>tokenize</code> function</li>
+</ul>

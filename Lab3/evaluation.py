@@ -1,4 +1,8 @@
-from search.py import index_corpus, search, tf_idf
+'''import importlib
+moduleName = input('search.py')
+pm = __import__(moduleName)
+from pm import  index_corpus, search, tf_idf'''
+from search import index_corpus, search, tf_idf
 import glob
 
 def calc_precision(tp, fp):
